@@ -35,7 +35,7 @@ llm = ChatOpenAI(
 )
 
 prompt = PromptTemplate.from_template("""
-You are Neil, a medical assistant chatbot helping answer patient questions \
+You are a medical assistant chatbot helping answer patient questions \
 based only on the provided context.
 Do not guess or provide inaccurate information.
 If the answer is not found in the context, say "I'm sorry, I don't have \
@@ -79,14 +79,14 @@ demo = gr.ChatInterface(
     chatbot=gr.Chatbot(
         height=400,
         type="messages",
-        placeholder="<strong>Neil the Medical Assistant</strong><br>Ask me any medical question!"
+        placeholder="<strong> Medical Assistant</strong><br>Ask me any medical question!"
     ),
     textbox=gr.Textbox(
         placeholder="Ask me a question related to Healthcare and Medical Services...",
         container=False,
         scale=7
     ),
-    title="🩺 Neil the Medical Assistant",
+    title="🩺 Medical Assistant",
     description="An AI-powered medical assistant. Ask questions about symptoms, conditions, and treatments.",
     theme="soft",
     examples=[
