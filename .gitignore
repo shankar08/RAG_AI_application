@@ -420,3 +420,6 @@ __marimo__/
 
 #fais_doc_idx
 fais_doc_idx/
+.gradio
+.vscode
+fais_doc_idx
