@@ -1,10 +1,10 @@
-# ðŸ©º Neil â€” AI Medical Assistant Chatbot
+#AI Medical Assistant Chatbot
 
-A Retrieval-Augmented Generation (RAG) powered medical assistant chatbot built with LangChain, OpenAI, FAISS, and Gradio. Neil answers patient questions based strictly on a curated medical knowledge base, without hallucinating or guessing beyond the provided context.
+A Retrieval-Augmented Generation (RAG) powered medical assistant chatbot built with LangChain, OpenAI, FAISS, and Gradio.
 
 ---
 
-## ðŸ“ Project Structure
+## Project Structure
 
 ```
 RAG_AI_application/
@@ -12,8 +12,6 @@ RAG_AI_application/
 â”œâ”€â”€ gradio_chatbot.py          # Gradio UI + RAG chain (main entry point)
 â”œâ”€â”€ ai-medical-chatbot.txt     # Medical knowledge base (source dataset)
 â”œâ”€â”€ faiss_doc_idx/             # Saved FAISS vector index (auto-generated)
-â”‚   â”œâ”€â”€ index.faiss
-â”‚   â””â”€â”€ index.pkl
 â”œâ”€â”€ .env                       # API keys (never commit this)
 â”œâ”€â”€ requirements.txt           # Pinned dependencies
 â””â”€â”€ README.md
@@ -21,88 +19,49 @@ RAG_AI_application/
 
 ---
 
-## ðŸ§ How It Works
+## How It Works
 
-```
-ai-medical-chatbot.txt
-        â”‚
-        â–¼
-  Text Cleaning & Parsing
-        â”‚
-        â–¼
-  CharacterTextSplitter (chunk_size=300, overlap=128)
-        â”‚
-        â–¼
-  OpenAIEmbeddings â†’ FAISS Vector Store
-        â”‚
-        â–¼
-  User Query â†’ Retriever (top-k=4 similar chunks)
-        â”‚
-        â–¼
-  PromptTemplate + ChatOpenAI (gpt-3.5-turbo)
-        â”‚
-        â–¼
-  Answer â†’ Gradio Chat UI
-```
-
-1. **Ingestion** (`Agentic_ai_with_RAG.py`) â€” Reads the medical text file, cleans and parses it into question-answer pairs, chunks the content, generates OpenAI embeddings, and saves a FAISS vector index to disk.
-2. **Retrieval** â€” On each user query, the retriever finds the top 4 most semantically similar chunks from the FAISS index.
-3. **Generation** â€” The retrieved chunks are injected into a prompt template and passed to `gpt-3.5-turbo` to generate a grounded answer.
-4. **UI** â€” Gradio 5 `ChatInterface` provides a clean chat UI with example questions.
+1. **Ingestion** - Reads `ai-medical-chatbot.txt`, cleans and chunks the text, generates OpenAI embeddings, and saves a FAISS vector index to disk.
+2. **Retrieval** - On each user query, finds the top 4 most similar chunks from the FAISS index.
+3. **Generation** - Passes retrieved chunks + question to `gpt-3.5-turbo` to generate a grounded answer.
+4. **UI** - Gradio 5 ChatInterface provides a simple chat interface.
 
 ---
 
-## âš™ï¸ Setup
+## Setup
 
-### 1. Clone / Download the Project
-
-```bash
-cd "RAG_AI_application"
-```
-
-### 2. Create a Virtual Environment
+### 1. Create a Virtual Environment
 
 ```bash
 python3.11 -m venv .venv
-source .venv/bin/activate        # Mac/Linux
-# .venv\Scripts\activate         # Windows
+source .venv/bin/activate
 ```
 
-### 3. Install Dependencies
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Configure Your OpenAI API Key
+### 3. Configure API Key
 
 Create a `.env` file in the project root:
 
-```env
+```
 OPENAI_API_KEY=sk-xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-> âš ï¸ Never commit `.env` to Git. Add it to `.gitignore`.
-
 ---
 
-## ðŸš€ Running the App
-
-Simply run the Gradio chatbot â€” it automatically rebuilds the FAISS index on every startup:
+## Running the App
 
 ```bash
 python3.11 gradio_chatbot.py
 ```
 
-This will:
+This will rebuild the FAISS vector store and launch the Gradio UI at `http://localhost:7860`.
 
-1. Rebuild the FAISS vector store from `ai-medical-chatbot.txt`
-2. Launch the Gradio UI at `http://localhost:7860`
-3. Optionally generate a public share link (expires in 72 hours)
-
-### Run the Ingestion Script Standalone (Optional)
-
-If you only want to rebuild the vector store without launching the UI:
+To only rebuild the vector store without launching the UI:
 
 ```bash
 python3.11 Agentic_ai_with_RAG.py
@@ -110,94 +69,81 @@ python3.11 Agentic_ai_with_RAG.py
 
 ---
 
-## ðŸ“¦ Dependencies
+## Dependencies
 
-| Package                    | Version  | Purpose                                   |
-| -------------------------- | -------- | ----------------------------------------- |
-| `langchain`                | 0.2.17   | Core orchestration                        |
-| `langchain-core`           | 0.2.43   | Prompts, runnables, LCEL                  |
-| `langchain-openai`         | 0.1.25   | OpenAI LLM + Embeddings                   |
-| `langchain-community`      | 0.2.17   | FAISS vector store integration            |
-| `langchain-text-splitters` | 0.2.4    | Text chunking                             |
-| `faiss-cpu`                | 1.7.4    | Vector similarity search                  |
-| `openai`                   | >=1.56.1 | OpenAI API client                         |
-| `httpx`                    | 0.27.2   | HTTP client (pinned to avoid proxies bug) |
-| `gradio`                   | >=5.0.0  | Chat UI                                   |
-| `jinja2`                   | >=3.1.4  | Gradio template rendering                 |
-| `python-dotenv`            | 1.0.1    | `.env` file loading                       |
-| `tiktoken`                 | 0.8.0    | Token counting                            |
+| Package                  | Version  | Purpose                                   |
+| ------------------------ | -------- | ----------------------------------------- |
+| langchain                | 0.2.17   | Core orchestration                        |
+| langchain-core           | 0.2.43   | Prompts, runnables, LCEL                  |
+| langchain-openai         | 0.1.25   | OpenAI LLM and Embeddings                 |
+| langchain-community      | 0.2.17   | FAISS vector store integration            |
+| langchain-text-splitters | 0.2.4    | Text chunking                             |
+| faiss-cpu                | 1.7.4    | Vector similarity search                  |
+| openai                   | >=1.56.1 | OpenAI API client                         |
+| httpx                    | 0.27.2   | HTTP client (pinned to avoid proxies bug) |
+| gradio                   | >=5.0.0  | Chat UI                                   |
+| jinja2                   | >=3.1.4  | Gradio template rendering                 |
+| python-dotenv            | 1.0.1    | .env file loading                         |
+| tiktoken                 | 0.8.0    | Token counting                            |
 
 ---
 
-## ðŸ”§ Configuration
+## Configuration
 
-### Changing the LLM Model
+### Change the LLM model
 
-In `gradio_chatbot.py`, update the `ChatOpenAI` model name:
+In `gradio_chatbot.py`:
 
 ```python
-llm = ChatOpenAI(
-    model="gpt-4o",       # upgrade to GPT-4o for better answers
-    api_key=api_key,
-    temperature=0.2
-)
+llm = ChatOpenAI(model="gpt-4o", api_key=api_key, temperature=0.2)
 ```
 
-### Changing Chunk Size
+### Change chunk size
 
-In `Agentic_ai_with_RAG.py`, adjust the splitter parameters:
+In `Agentic_ai_with_RAG.py`:
 
 ```python
-text_splitter = CharacterTextSplitter(
-    separator='\n',
-    chunk_size=500,       # increase for more context per chunk
-    chunk_overlap=200,    # increase overlap for better continuity
-    length_function=len
-)
+text_splitter = CharacterTextSplitter(chunk_size=500, chunk_overlap=200)
 ```
 
-### Changing Number of Retrieved Chunks
+### Change number of retrieved chunks
 
-In `gradio_chatbot.py`, update the retriever:
+In `gradio_chatbot.py`:
 
 ```python
-retriever = vectorStore.as_retriever(
-    search_type="similarity",
-    search_kwargs={"k": 6}    # retrieve 6 chunks instead of 4
-)
+retriever = vectorStore.as_retriever(search_kwargs={"k": 6})
 ```
 
 ---
 
-## âš ï¸ Known Issues & Fixes
+## Known Issues
 
-| Error                                          | Cause                         | Fix                                         |
-| ---------------------------------------------- | ----------------------------- | ------------------------------------------- |
-| `ModuleNotFoundError: langchain.text_splitter` | LangChain 0.3+ moved modules  | Use `langchain_text_splitters`              |
-| `ModuleNotFoundError: langchain.prompts`       | Module moved                  | Use `langchain_core.prompts`                |
-| `ModuleNotFoundError: langchain.chains`        | `RetrievalQA` removed in 0.3+ | Use LCEL chain                              |
-| `unexpected keyword argument 'proxies'`        | `httpx>=0.28` removed proxies | Pin `httpx==0.27.2`                         |
-| `TypeError: unhashable type: 'dict'`           | Gradio 4.x + Jinja2 conflict  | Upgrade to `gradio>=5.0.0`                  |
-| `unexpected keyword argument 'retry_btn'`      | Removed in Gradio 5           | Remove `retry_btn`, `undo_btn`, `clear_btn` |
+| Error                                        | Cause                        | Fix                                   |
+| -------------------------------------------- | ---------------------------- | ------------------------------------- |
+| ModuleNotFoundError: langchain.text_splitter | LangChain 0.3+ moved modules | Use langchain_text_splitters          |
+| ModuleNotFoundError: langchain.prompts       | Module moved                 | Use langchain_core.prompts            |
+| ModuleNotFoundError: langchain.chains        | RetrievalQA removed in 0.3+  | Use LCEL chain                        |
+| unexpected keyword argument 'proxies'        | httpx>=0.28 removed proxies  | Pin httpx==0.27.2                     |
+| TypeError: unhashable type dict              | Gradio 4.x + Jinja2 conflict | Upgrade to gradio>=5.0.0              |
+| unexpected keyword argument 'retry_btn'      | Removed in Gradio 5          | Remove retry_btn, undo_btn, clear_btn |
 
 ---
 
-## ðŸ”’ Security Notes
+## Security Notes
 
-- Never commit your `.env` file or expose your `OPENAI_API_KEY`.
-- The `allow_dangerous_deserialization=True` flag is required to load FAISS indexes from disk â€” only load indexes you generated yourself.
-- Add `.env` and `faiss_doc_idx/` to `.gitignore`:
+- Never commit your `.env` file.
+- Only load FAISS indexes you generated yourself (`allow_dangerous_deserialization=True`).
+- Add the following to `.gitignore`:
 
-```gitignore
+```
 .env
 faiss_doc_idx/
 .venv/
 __pycache__/
-*.pyc
 ```
 
 ---
 
-## ðŸ“„ License
+## License
 
-MIT License â€” free to use, modify, and distribute.
+MIT License - free to use, modify, and distribute.
