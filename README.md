@@ -8,13 +8,13 @@ A Retrieval-Augmented Generation (RAG) powered medical assistant chatbot built w
 
 ```
 RAG_AI_application/
-â”œâ”€â”€ Agentic_ai_with_RAG.py     # Builds and saves the FAISS vector store
-â”œâ”€â”€ gradio_chatbot.py          # Gradio UI + RAG chain (main entry point)
-â”œâ”€â”€ ai-medical-chatbot.txt     # Medical knowledge base (source dataset)
-â”œâ”€â”€ faiss_doc_idx/             # Saved FAISS vector index (auto-generated)
-â”œâ”€â”€ .env                       # API keys (never commit this)
-â”œâ”€â”€ requirements.txt           # Pinned dependencies
-â””â”€â”€ README.md
+Agentic_ai_with_RAG.py     # Builds and saves the FAISS vector store
+gradio_chatbot.py          # Gradio UI + RAG chain (main entry point)
+ai-medical-chatbot.txt     # Medical knowledge base (source dataset)
+faiss_doc_idx/             # Saved FAISS vector index (auto-generated)
+.env                       # API keys (never commit this)
+requirements.txt           # Pinned dependencies
+README.md
 ```
 
 ---
